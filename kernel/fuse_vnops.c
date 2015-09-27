@@ -4290,7 +4290,6 @@ fuse_vnode_cache_remove(struct vnode *vp, fuse_session_t *sep)
 	if ((removep = avl_find(& (sep->avl_cache_i), &discard, &where))
 	    != NULL) {
 		avl_remove(&(sep->avl_cache_i), removep);
-		/* Files deleted while open are not recorded in tree by name */
 		if (removep->namelen > 1)
 			avl_remove(&(sep->avl_cache_n), removep);
 		mutex_exit(&sep->avl_mutx);
@@ -4354,6 +4353,7 @@ fuse_inactive(struct vnode *vp, struct cred *credp, caller_context_t *ct)
 		mutex_enter(&sep->avl_mutx);
 		closep = avl_find(&(sep->avl_cache_i), &find, NULL);
 		mutex_exit(&sep->avl_mutx);
+		/* Files deleted while open are not recorded in tree by name */
 		if (closep && (closep->namelen < 2)) {
 			fuse_vnode_free(vp, sep);
 			deleted = 1;
