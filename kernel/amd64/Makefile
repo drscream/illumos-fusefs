@@ -23,7 +23,12 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 
-CFLAGS=-xmodel=kernel -m64
+STUDIO_FLAGS =  -D_KERNEL -m64 -xmodel=kernel
+GCC_FLAGS =     -D_KERNEL -m64 -mcmodel=kernel -mno-red-zone -ffreestanding \
+                -nodefaultlibs
+
+CFLAGS = $(GCC_FLAGS)
+
 LINTFLAGS = -m64
 include ../Makefile.com
 
